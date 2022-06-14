@@ -28,12 +28,12 @@
                         <action selector="tappedSendButton:" destination="-1" eventType="touchUpInside" id="sQa-D1-jGf"/>
                     </connections>
                 </button>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="メッセージの内容" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qmZ-Kf-gFJ">
+                <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="メッセージの内容" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qmZ-Kf-gFJ">
                     <rect key="frame" x="10" y="10" width="407" height="86"/>
-                    <color key="backgroundColor" red="0.8693468866195172" green="0.82935754170342812" blue="0.89411764705882346" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <color key="backgroundColor" red="0.95686274509803915" green="0.94901960784313721" blue="0.94117647058823528" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
                     <color key="textColor" systemColor="labelColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    <textInputTraits key="textInputTraits"/>
                 </textView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

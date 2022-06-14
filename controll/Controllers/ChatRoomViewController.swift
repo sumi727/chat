@@ -76,7 +76,7 @@ class ChatRoomViewController: UIViewController{
         ChatRoomTableView.delegate = self
         ChatRoomTableView.dataSource = self
         ChatRoomTableView.register(UINib(nibName: "ChatRoomTableViewCell", bundle: nil), forCellReuseIdentifier: cellId)
-        ChatRoomTableView.backgroundColor = UIColor{_ in return #colorLiteral(red: 0.7822921872, green: 0.5987234712, blue: 0.5070788264, alpha: 1)}
+        ChatRoomTableView.backgroundColor = UIColor{_ in return #colorLiteral(red: 0.9568627451, green: 0.9490196078, blue: 0.9411764706, alpha: 1)}
         ChatRoomTableView.contentInset = .init(top: 0, left: 0, bottom: 0, right: 0)
         ChatRoomTableView.scrollIndicatorInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
         ChatRoomTableView.keyboardDismissMode = .interactive
@@ -192,6 +192,7 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = ChatRoomTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatRoomTableViewCell
         cell.transform = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
         cell.message = messages[indexPath.row]
+        
         return cell
     }
 

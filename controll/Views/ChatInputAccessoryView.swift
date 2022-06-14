@@ -36,9 +36,6 @@ class ChatInputAccessoryView: UIView {
 
     private func setupViews(){
         chatTextView.layer.cornerRadius = 15
-        chatTextView.layer.borderColor = UIColor{_ in return #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)}.cgColor
-        chatTextView.layer.borderWidth  = 1
-
 
         sendButton.layer.cornerRadius = 15
         sendButton.imageView?.contentMode = .scaleAspectFill

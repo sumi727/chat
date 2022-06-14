@@ -69,6 +69,9 @@ class ChatListViewController: UIViewController{
         setupView()
         confirmLoggedInUser()
         fetchChatroomsInfoFromFirestore()
+        for item in(self.tabBarController?.tabBar.items)! {
+            item.imageInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+        }
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -177,6 +180,8 @@ extension ChatListViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ChatListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatListTableViewCell
         cell.chatroom = chatrooms[indexPath.row]
+        cell.layer.cornerRadius = 40
+        cell.layer.borderColor = CGColor(red: 159, green: 158, blue: 158, alpha: 0)
         return cell
     }
 

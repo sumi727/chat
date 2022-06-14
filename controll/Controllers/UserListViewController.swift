@@ -26,6 +26,9 @@ class UserListViewController: UIViewController {
         fetchLoginUserInfo()
         userListTableView.delegate = self
         userListTableView.dataSource = self
+        for item in(self.tabBarController?.tabBar.items)! {
+            item.imageInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
+        }
         
     }
 
@@ -183,6 +186,11 @@ class UserListViewController: UIViewController {
 
 extension UserListViewController: UITableViewDelegate, UITableViewDataSource{
 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 1
+    }
+    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
@@ -190,6 +198,9 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = userListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserListTableViewCell
         cell.user = users[indexPath.row]
+        cell.layer.cornerRadius = 40
+        cell.layer.masksToBounds = true
+
         return cell
     }
 
