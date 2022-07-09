@@ -10,7 +10,14 @@ import UIKit
 import Firebase
 import Nuke
 
+protocol ResetDataDelegate: AnyObject{
+    func chatListResetData()
+    func userResetData()
+}
+
 class SideMenuViewController: UIViewController {
+    weak var delegate: ResetDataDelegate?
+
     private var users = [User]()
     
     @IBOutlet weak var myProfileImageView: UIImageView!
@@ -43,13 +50,15 @@ class SideMenuViewController: UIViewController {
 
     @IBAction func tappedLogoutButton(_ sender: UIButton) {
         do{
+            delegate?.chatListResetData()
+            delegate?.userResetData()
             try Auth.auth().signOut()
             let storyboard = UIStoryboard(name: "SignUp", bundle: nil)
             let SignUpViewController  = storyboard.instantiateViewController(withIdentifier: "SignUpViewController")
             let nav = UINavigationController(rootViewController: SignUpViewController)
             nav.modalPresentationStyle = .fullScreen
             self.present(nav, animated: true, completion: nil)
-        } catch{
+        } catch {
             print("logout失敗")
             return
         }

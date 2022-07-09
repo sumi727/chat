@@ -9,8 +9,13 @@ import UIKit
 import FirebaseFirestore
 import Nuke
 import FirebaseAuth
+import SwiftUI
 
-class UserListViewController: UIViewController {
+class UserListViewController: UIViewController, ResetDataDelegate{
+    func chatListResetData() {
+        return
+    }
+
 
     private let cellId = "cellId"
     private var users = [User]()
@@ -37,6 +42,12 @@ class UserListViewController: UIViewController {
         fetchUserInfoFromFirestore()
         
     }
+
+    func userResetData(){
+        users.removeAll()
+        userListTableView.reloadData()
+    }
+
     private func fetchLoginUserInfo(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
@@ -49,6 +60,34 @@ class UserListViewController: UIViewController {
             self.user = user
         }
     }
+
+    //    private func navigationChatRoomview(){
+    //        guard let uid = Auth.auth().currentUser?.uid else { return }
+    //        guard let partnerUid = self.selectedUser?.uid else { return }
+    //        var necessaryChatroom :ChatRoom?
+    //
+    //        let members = [uid, partnerUid]
+    //        Firestore.firestore().collection("chatRooms").getDocuments{(snapshots, err) in
+    //            if err != nil{
+    //                print("err")
+    //                return
+    //            }
+    //            snapshots?.documents.forEach({ (snapshot) in
+    //
+    //                let dic = snapshot.data()
+    //                let chatroom = ChatRoom.init(dic: dic)
+    //                chatroom.documentID = snapshot.documentID
+    //
+    //                let chatroomMember: [String] = (dic["members"] as? [String])!
+    //                let newMembers = members.sorted()
+    //                let newChatroomMember = chatroomMember.sorted()
+    //                if newMembers == newChatroomMember{
+    //                    necessaryChatroom = chatroom
+    //                }
+    //            })
+    //        }
+    //
+    //    }
 
     private func tappedCell(){
 
@@ -73,16 +112,15 @@ class UserListViewController: UIViewController {
             snapshots?.documents.forEach({ (snapshot) in
 
                 let dic = snapshot.data()
-//                let chatroom = ChatRoom.init(dic: dic)
-//                chatroom.partnerUser = self.selectedUser
-//                chatroom.documentID = snapshot.documentID
+                //                let chatroom = ChatRoom.init(dic: dic)
+                //                chatroom.documentID = snapshot.documentID
 
                 let chatroomMember: [String] = (dic["members"] as? [String])!
                 let newMembers = members.sorted()
                 let newChatroomMember = chatroomMember.sorted()
                 if newMembers == newChatroomMember{
                     A += 1
-//                    self.chatrooms.append(chatroom)
+                    //                    self.chatrooms.append(chatroom)
                 }
 
 
@@ -155,39 +193,36 @@ class UserListViewController: UIViewController {
                                 }
                             })
                         }
-
                     })
-
                 }
             })
         }
 
-
-//
-//        Firestore.firestore().collection("users").getDocuments { (snapshots, err) in
-//            if err != nil{
-//                print("user情報の取得に失敗した。")
-//                return
-//            }
-//            snapshots?.documents.forEach({ (snapshot) in
-//                let dic = snapshot.data()
-//                let user = User.init(dic: dic)
-//                user.uid = snapshot.documentID
-//                guard let uid = Auth.auth().currentUser?.uid else { return }
-//                if uid == snapshot.documentID {
-//                    return
-//                }
-//                self.users.append(user)
-//                self.userListTableView.reloadData()
-//            })
-//        }
+        //
+        //        Firestore.firestore().collection("users").getDocuments { (snapshots, err) in
+        //            if err != nil{
+        //                print("user情報の取得に失敗した。")
+        //                return
+        //            }
+        //            snapshots?.documents.forEach({ (snapshot) in
+        //                let dic = snapshot.data()
+        //                let user = User.init(dic: dic)
+        //                user.uid = snapshot.documentID
+        //                guard let uid = Auth.auth().currentUser?.uid else { return }
+        //                if uid == snapshot.documentID {
+        //                    return
+        //                }
+        //                self.users.append(user)
+        //                self.userListTableView.reloadData()
+        //            })
+        //        }
     }
 }
 
 extension UserListViewController: UITableViewDelegate, UITableViewDataSource{
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 1
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
     
 
@@ -195,6 +230,12 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource{
         return users.count
     }
 
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.layer.masksToBounds = true
+        let radius = cell.contentView.layer.cornerRadius
+        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = userListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserListTableViewCell
         cell.user = users[indexPath.row]
@@ -209,19 +250,20 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource{
         self.selectedUser = user
         tappedCell()
 
+        let UINavigationController = tabBarController?.viewControllers?[1]
+        tabBarController?.selectedViewController = UINavigationController
 
-//        let storyboard = UIStoryboard.init(name: "ChatRoom", bundle: nil)
-//        let ChatRoomViewController = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController") as! ChatRoomViewController
-//        ChatRoomViewController.user = user
-//        ChatRoomViewController.chatroom = chatrooms[indexPath.row]
-//        navigationController?.pushViewController(ChatRoomViewController, animated: true)
-
-        }
+        //
+        //        let storyboard = UIStoryboard(name: "ChatRoom", bundle: nil)
+        //        let ChatRoomViewController = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController") as! ChatRoomViewController
+        //        ChatRoomViewController.user = user
+        //        ChatRoomViewController.chatroom = necessaryChatroom
+        //        navigationController?.pushViewController(ChatRoomViewController, animated: true)
+    }
 }
 
 class UserListTableViewCell: UITableViewCell {
-    
-    
+
     var user: User? {
         didSet{
             userLabel.text = user?.username
@@ -230,11 +272,19 @@ class UserListTableViewCell: UITableViewCell {
             }
         }
     }
-
     @IBOutlet weak var userimage: UIImageView!
     @IBOutlet weak var userLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         userimage.layer.cornerRadius = 25
+
+        backgroundColor = .clear
+        layer.masksToBounds = false
+        layer.shadowOpacity = 0.23
+        layer.shadowRadius = 4
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowColor = UIColor.black.cgColor
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 8
     }
 }

@@ -88,7 +88,7 @@ class SignUpViewController: UIViewController{
                     return
                 }
                 guard let urlString = url?.absoluteString else { return }
-                print("urlString: ", urlString)
+
                 self.createUsersToFirebase(profileImageUrl: urlString)
             }
         }

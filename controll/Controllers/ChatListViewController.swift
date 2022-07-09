@@ -15,7 +15,11 @@ protocol ChatListViewDeligate:AnyObject{
     func handleAddedDocumentChange(documentChange: DocumentChange )
 }
 
-class ChatListViewController: UIViewController{
+class ChatListViewController: UIViewController, ResetDataDelegate{
+    func userResetData() {
+        return
+    }
+
     private let cellId = "cellId"
     private var chatrooms = [ChatRoom]()
     private var chatRoomListener: ListenerRegistration?
@@ -59,8 +63,14 @@ class ChatListViewController: UIViewController{
         })
     }
 
+    func chatListResetData(){
+        chatrooms.removeAll()
+        ChatListTableView.reloadData()
+    }
 
     @IBOutlet weak var ChatListTableView: UITableView!
+
+
 
 
     override func viewDidLoad() {
@@ -69,6 +79,7 @@ class ChatListViewController: UIViewController{
         setupView()
         confirmLoggedInUser()
         fetchChatroomsInfoFromFirestore()
+        
         for item in(self.tabBarController?.tabBar.items)! {
             item.imageInsets = UIEdgeInsets(top: -10, left: -10, bottom: -10, right: -10)
         }
@@ -78,6 +89,7 @@ class ChatListViewController: UIViewController{
         fetchLoginUserInfo()
 
     }
+    
 
 
     
@@ -163,9 +175,7 @@ class ChatListViewController: UIViewController{
             let user = User(dic: dic)
             self.user = user
         }
-
     }
-
 }
 extension ChatListViewController: UITableViewDelegate,UITableViewDataSource{
 
@@ -175,6 +185,12 @@ extension ChatListViewController: UITableViewDelegate,UITableViewDataSource{
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chatrooms.count
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.layer.masksToBounds = true
+        let radius = cell.contentView.layer.cornerRadius
+        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: radius).cgPath
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -221,6 +237,15 @@ class ChatListTableViewCell: UITableViewCell{
     override  func awakeFromNib() {
         super.awakeFromNib()
         userimageView.layer.cornerRadius = 25
+        backgroundColor = .clear
+        layer.masksToBounds = false
+        layer.shadowOpacity = 0.23
+        layer.shadowRadius = 4
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowColor = UIColor.black.cgColor
+
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 8
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
